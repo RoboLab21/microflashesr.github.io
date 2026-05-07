@@ -43,6 +43,10 @@ function appendMonitor(line) {
 
 connectBtn.addEventListener("click", async () => {
   try {
+    if (port?.readable || port?.writable) {
+      setStatus("Порт уже открыт");
+      return;
+    }
     port = await navigator.serial.requestPort({});
     await port.open({ baudRate: 115200 });
     transport = new Transport(port);
