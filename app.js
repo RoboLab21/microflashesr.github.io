@@ -1,4 +1,4 @@
-import { ESPLoader, Transport } from "https://cdn.jsdelivr.net/npm/esptool-js@0.4.5/dist/web/index.js";
+import { ESPLoader, Transport } from "https://esm.sh/esptool-js@0.4.5";
 
 const connectBtn = document.getElementById("btn-connect");
 const disconnectBtn = document.getElementById("btn-disconnect");
