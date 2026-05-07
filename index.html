@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Microbot Flasher</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="container">
+      <header class="header">
+        <div>
+          <h1>Microbot Flasher</h1>
+          <p>Прошивка ESP32 прямо в браузере без установки инструментов.</p>
+        </div>
+        <div class="badge">Web Serial</div>
+      </header>
+
+      <section class="card">
+        <h2>1) Выбор устройства</h2>
+        <div class="row">
+          <button id="btn-connect" class="primary">Выбрать устройство</button>
+          <div id="device-status" class="muted">Устройство не выбрано</div>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>2) Список готовых прошивок</h2>
+        <div class="row">
+          <select id="firmware-select">
+            <option value="">— выберите прошивку —</option>
+            <option value="https://example.com/firmware1.bin" data-address="0x10000">Microbot L1 v1.0.0</option>
+            <option value="https://example.com/firmware2.bin" data-address="0x10000">Microbot L1 v1.1.0</option>
+          </select>
+          <button id="btn-load-remote" class="secondary">Подтвердить</button>
+        </div>
+        <div class="muted">Выберите прошивку и нажмите «Подтвердить».</div>
+      </section>
+
+      <section class="card">
+        <h2>3) Загрузка своего бинарного файла</h2>
+        <div class="row">
+          <input id="file-input" type="file" accept=".bin" />
+          <input id="file-address" type="text" value="0x10000" />
+        </div>
+        <div class="muted">Укажите адрес прошивки (обычно 0x10000).</div>
+      </section>
+
+      <section class="card">
+        <h2>4) Кнопка загрузить</h2>
+        <div class="row">
+          <button id="btn-flash" class="primary">Загрузить</button>
+          <button id="btn-disconnect" class="ghost">Отключиться</button>
+        </div>
+        <div class="progress">
+          <div id="progress-bar" class="progress-bar" style="width: 0%"></div>
+        </div>
+        <div id="progress-text" class="muted">Ожидание...</div>
+      </section>
+
+      <section class="card">
+        <h2>5) Монитор COM порта</h2>
+        <div class="row">
+          <button id="btn-monitor" class="secondary">Открыть монитор</button>
+          <button id="btn-monitor-stop" class="ghost">Остановить</button>
+        </div>
+        <pre id="serial-monitor" class="monitor"></pre>
+      </section>
+
+      <footer class="footer">
+        <span>Работает в Chromium/Chrome/Edge с поддержкой Web Serial.</span>
+      </footer>
+    </main>
+
+    <script type="module" src="app.js"></script>
+  </body>
+</html>
