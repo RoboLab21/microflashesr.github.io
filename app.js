@@ -1,4 +1,4 @@
-import { ESPLoader, Transport } from "https://esm.sh/esptool-js@0.4.5";
+import { ESPLoader, Transport } from "https://esm.sh/esptool-js@0.6.0";
 
 const connectBtn = document.getElementById("btn-connect");
 const disconnectBtn = document.getElementById("btn-disconnect");
@@ -105,7 +105,7 @@ flashBtn.addEventListener("click", async () => {
         }
       }
     }
-    transport = new Transport(port);
+    transport = new Transport(port, true);
     loader = new ESPLoader({
       transport,
       baudrate: 115200,
