@@ -48,29 +48,6 @@ connectBtn.addEventListener("click", async () => {
       return;
     }
     port = await navigator.serial.requestPort({});
-    if (!port.readable && !port.writable) {
-      try {
-        await port.open({ baudRate: 115200 });
-      } catch (err) {
-        if (!String(err?.message || err).includes("already open")) {
-          throw err;
-        }
-      }
-    }
-    transport = new Transport(port);
-    loader = new ESPLoader({
-      transport,
-      baudrate: 115200,
-      terminal: {
-        clean() {},
-        writeLine(data) {
-          appendMonitor(data + "\n");
-        },
-        write(data) {
-          appendMonitor(data);
-        },
-      },
-    });
     setStatus("Устройство подключено");
   } catch (err) {
     setStatus("Ошибка подключения");
@@ -119,8 +96,8 @@ flashBtn.addEventListener("click", async () => {
       await monitorReader.cancel();
       monitorReader = null;
     }
-    if (port?.readable || port?.writable) {
-      await port.close();
+    if (!port.readable && !port.writable) {
+      await port.open({ baudRate: 115200 });
     }
     transport = new Transport(port);
     loader = new ESPLoader({
@@ -175,12 +152,15 @@ flashBtn.addEventListener("click", async () => {
 });
 
 monitorBtn.addEventListener("click", async () => {
-  if (!port || !port.readable) {
+  if (!port) {
     setProgress(0, "Сначала подключите устройство");
     return;
   }
 
   try {
+    if (!port.readable && !port.writable) {
+      await port.open({ baudRate: 115200 });
+    }
     monitorReader = port.readable.getReader();
     setProgress(0, "Монитор запущен");
     while (true) {
