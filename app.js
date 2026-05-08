@@ -96,8 +96,14 @@ flashBtn.addEventListener("click", async () => {
       await monitorReader.cancel();
       monitorReader = null;
     }
-    if (!port.readable && !port.writable) {
-      await port.open({ baudRate: 115200 });
+    if (port.readable || port.writable) {
+      try {
+        await port.close();
+      } catch (err) {
+        if (!String(err?.message || err).includes("already open")) {
+          throw err;
+        }
+      }
     }
     transport = new Transport(port);
     loader = new ESPLoader({
