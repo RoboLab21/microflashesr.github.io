@@ -86,7 +86,7 @@ remoteBtn.addEventListener("click", () => {
 });
 
 flashBtn.addEventListener("click", async () => {
-  if (!loader) {
+  if (!port) {
     setProgress(0, "Сначала выберите устройство");
     return;
   }
