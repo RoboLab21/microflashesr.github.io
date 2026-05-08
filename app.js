@@ -126,13 +126,13 @@ flashBtn.addEventListener("click", async () => {
 
     if (fileInput.files.length > 0) {
       const file = fileInput.files[0];
-      const address = fileAddress.value || "0x10000";
-      const data = await file.arrayBuffer();
+      const address = parseInt(fileAddress.value || "0x10000", 16);
+      const data = new Uint8Array(await file.arrayBuffer());
       flashOptions.push({ address, data });
     } else if (selectedRemote) {
       const resp = await fetch(selectedRemote);
-      const data = await resp.arrayBuffer();
-      flashOptions.push({ address: selectedRemoteAddress, data });
+      const data = new Uint8Array(await resp.arrayBuffer());
+      flashOptions.push({ address: parseInt(selectedRemoteAddress, 16), data });
     }
 
     if (flashOptions.length === 0) {
@@ -140,7 +140,7 @@ flashBtn.addEventListener("click", async () => {
       return;
     }
 
-    await loader.flash({
+    await loader.writeFlash({
       fileArray: flashOptions,
       flashSize: "keep",
       eraseAll: false,
