@@ -48,7 +48,15 @@ connectBtn.addEventListener("click", async () => {
       return;
     }
     port = await navigator.serial.requestPort({});
-    await port.open({ baudRate: 115200 });
+    if (!port.readable && !port.writable) {
+      try {
+        await port.open({ baudRate: 115200 });
+      } catch (err) {
+        if (!String(err?.message || err).includes("already open")) {
+          throw err;
+        }
+      }
+    }
     transport = new Transport(port);
     loader = new ESPLoader({
       transport,
@@ -107,6 +115,10 @@ flashBtn.addEventListener("click", async () => {
   }
 
   try {
+    if (monitorReader) {
+      await monitorReader.cancel();
+      monitorReader = null;
+    }
     setProgress(0, "Подготовка...");
     await loader.main();
 
