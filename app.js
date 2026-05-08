@@ -119,6 +119,23 @@ flashBtn.addEventListener("click", async () => {
       await monitorReader.cancel();
       monitorReader = null;
     }
+    if (port?.readable || port?.writable) {
+      await port.close();
+    }
+    transport = new Transport(port);
+    loader = new ESPLoader({
+      transport,
+      baudrate: 115200,
+      terminal: {
+        clean() {},
+        writeLine(data) {
+          appendMonitor(data + "\n");
+        },
+        write(data) {
+          appendMonitor(data);
+        },
+      },
+    });
     setProgress(0, "Подготовка...");
     await loader.main();
 
